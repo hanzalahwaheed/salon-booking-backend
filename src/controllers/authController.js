@@ -10,15 +10,16 @@ export const limiter = rateLimit({
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, isAdmin } = req.body;
     const user = await User.findOne({ email });
-    console.log(username);
+
     if (user) res.json("user already exists");
     else {
       await User.create({
         username,
         password,
         email,
+        isAdmin,
       });
 
       res.json({ status: true, message: "User created" });
@@ -38,6 +39,9 @@ export const login = async (req, res) => {
     // implement bcrypt password comparison here
 
     const token = jwt.sign({ email: email }, "jwtkey", { expiresIn: "2hr" });
+
+    console.log(token);
+    
     res.cookie("token", token, { maxAge: 1000 * 60 * 60, httpOnly: true });
 
     res.json({ status: true, message: "login successful" });
