@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
+import availabilityRoutes from "./routes/availabilityRoutes.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/availability", availabilityRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
