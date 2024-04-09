@@ -30,7 +30,6 @@ export const setAvailability = async (req, res) => {
       .json({
         status: true,
         message: "availability set",
-        availability: availability,
       });
   } catch (error) {
     res.status(500).json({ error: "Failed to set availability" });
