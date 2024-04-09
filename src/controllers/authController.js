@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import rateLimit from "express-rate-limit";
+import { registerSchema, loginSchema } from "./validations.js";
 
 export const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -10,7 +11,15 @@ export const limiter = rateLimit({
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password, isAdmin } = req.body;
+    const { username, email, password, isAdmin } = registerSchema.safeParse(
+      req.body
+    );
+    if (!username || !email || !password) {
+      return res
+        .status(400)
+        .json({ status: false, message: "Invalid input data" });
+    }
+
     const user = await User.findOne({ email });
 
     if (user) res.json("user already exists");
@@ -32,7 +41,13 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = loginSchema.safeParse(req.body);
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ status: false, message: "Invalid input data" });
+    }
+
     const user = await User.findOne({ email });
     if (!user) res.json("user doesnt exist");
 

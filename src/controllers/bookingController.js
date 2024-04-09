@@ -1,6 +1,7 @@
 import Availability from "../models/Availability.js";
 import Booking from "../models/Booking.js";
 import User from "../models/User.js";
+import { setBookingSchema } from "./validations.js";
 
 export const setBooking = async (req, res) => {
   try {
@@ -15,12 +16,13 @@ export const setBooking = async (req, res) => {
     }
     const userId = user._id;
 
-    const { day, date, slotStart, slotEnd, bookingCount } = req.body;
-
+    const { day, date, slotStart, slotEnd, bookingCount } =
+      setBookingSchema.safeParse(req.body);
     if (!day || !date || !slotStart || !slotEnd || !bookingCount) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
+    // Future Scope: Convert into Transaction
     const availability = await Availability.findOne({ date });
     if (!availability) {
       return res.status(404).json({ error: "Availability not found" });

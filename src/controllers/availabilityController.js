@@ -1,5 +1,6 @@
 import Availability from "../models/Availability.js";
 import User from "../models/User.js";
+import { setAvailabilitySchema, getAvailabilitySchema } from "./validations.js";
 
 export const setAvailability = async (req, res) => {
   const email = req.email;
@@ -8,9 +9,10 @@ export const setAvailability = async (req, res) => {
   if (!user) return res.json("User not Found");
   if (!user.isAdmin) return res.json("User unauthorized");
 
-  const { date, day, slotStart, slotEnd, maxCapacity } = req.body;
-
   try {
+    const { date, day, slotStart, slotEnd, maxCapacity } =
+      setAvailabilitySchema.safeParse(req.body);
+
     const availability = await Availability.findOne({ date, day });
 
     if (!availability) {
@@ -25,20 +27,19 @@ export const setAvailability = async (req, res) => {
       await availability.save();
     }
 
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: "availability set",
-      });
+    res.status(200).json({
+      status: true,
+      message: "availability set",
+    });
   } catch (error) {
-    res.status(500).json({ error: "Failed to set availability" });
+    res.status(400).json({ error: error.errors });
   }
 };
 
 export const getAvailability = async (req, res) => {
-  const date = req.params.date;
   try {
+    const { date } = getAvailabilitySchema.safeParse(req.params);
+
     const availability = await Availability.findOne({ date });
 
     if (!availability) {
@@ -54,6 +55,6 @@ export const getAvailability = async (req, res) => {
     res.status(200).json(freeSlots);
   } catch (error) {
     console.error("Error retrieving availability:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(400).json({ error: error.errors });
   }
 };
