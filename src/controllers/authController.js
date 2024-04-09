@@ -38,10 +38,12 @@ export const login = async (req, res) => {
 
     // implement bcrypt password comparison here
 
-    const token = jwt.sign({ email: email }, "jwtkey", { expiresIn: "2hr" });
+    const token = jwt.sign({ email: email }, process.env.JWT_KEY, {
+      expiresIn: "2hr",
+    });
 
     console.log(token);
-    
+
     res.cookie("token", token, { maxAge: 1000 * 60 * 60, httpOnly: true });
 
     res.json({ status: true, message: "login successful" });

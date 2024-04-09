@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
     if (!token) {
       return res.json({ status: false, message: "unauthorised" });
     }
-    const decoded = jwt.verify(token, "jwtkey");
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
     req.email = decoded.email;
     if (decoded) next();
   } catch (error) {
