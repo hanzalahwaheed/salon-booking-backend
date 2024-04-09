@@ -41,7 +41,6 @@ export const getAvailability = async (req, res) => {
   const date = req.params.date;
   try {
     const availability = await Availability.findOne({ date });
-    console.log(availability);
 
     if (!availability) {
       // No availability found for the given date
