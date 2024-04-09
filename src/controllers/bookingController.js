@@ -1,7 +1,7 @@
 import Availability from "../models/Availability.js";
 import Booking from "../models/Booking.js";
 import User from "../models/User.js";
-import { setBookingSchema } from "./validations.js";
+import { setBookingSchema } from "../utils/validation.js";
 
 export const setBooking = async (req, res) => {
   try {

@@ -1,6 +1,6 @@
 import Availability from "../models/Availability.js";
 import User from "../models/User.js";
-import { setAvailabilitySchema, getAvailabilitySchema } from "./validations.js";
+import { setAvailabilitySchema, getAvailabilitySchema } from "../utils/validation.js";
 
 export const setAvailability = async (req, res) => {
   const email = req.email;

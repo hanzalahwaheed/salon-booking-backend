@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import rateLimit from "express-rate-limit";
-import { registerSchema, loginSchema } from "./validations.js";
+import { registerSchema, loginSchema } from "../utils/validation.js";
 
 export const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
